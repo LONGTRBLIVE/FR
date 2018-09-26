@@ -26,20 +26,20 @@ def relight(img, light=1, bias=0):
                 img[j,i,c] = tmp
     return img
 
-#使用dlib自带的frontal_face_detector作为我们的特征提取器
+#use the frontal_face_detector that comes with dlib as our feature extractor
 detector = dlib.get_frontal_face_detector()
-# 打开摄像头 参数为输入流，可以为摄像头或视频文件
+# open camera
 camera = cv2.VideoCapture(0)
 
 index = 1
 while True:
     if (index <= 10000):
         print('Being processed picture %s' % index)
-        # 从摄像头读取照片
+        # read photo from camera
         success, img = camera.read()
-        # 转为灰度图片
+        # convert to grayscale image
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        # 使用detector进行人脸检测
+        # use detector facerecognition
         dets = detector(gray_img, 1)
 
         for i, d in enumerate(dets):
@@ -49,7 +49,7 @@ while True:
             y2 = d.right() if d.right() > 0 else 0
 
             face = img[x1:y1,x2:y2]
-            # 调整图片的对比度与亮度， 对比度与亮度值都取随机数，这样能增加样本的多样性
+            # adjust the contrast and brightness of the image
             face = relight(face, random.uniform(0.5, 1.5), random.randint(-50, 50))
 
             face = cv2.resize(face, (size,size))
